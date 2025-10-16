@@ -5,7 +5,6 @@ import random
 from functools import reduce
 
 
-
 numbers_to_use = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100]
 
 operations = ["addition", "soustraction", "multiplication", "division"]
@@ -88,7 +87,7 @@ def launch_game():
     print(f"Here are your numbers: {numbers_to_use}")
     while want_to_continue.lower() == "y":
         result = operation_result(choose_two_numbers(), choose_operation())
-        print(f"The number to get: {number_to_get}")
+        print(f"The number to get is: {number_to_get}")
         print(f"Result: {result if result is not None else 'Opération impossible'}")
         print(f"Remaining numbers: {numbers_to_use}")
         if result == number_to_get:
@@ -102,10 +101,8 @@ def launch_game():
         want_to_continue = input("Do you want to continue?: Y/n ")
 
     else:
-        print(f"Number to get: {number_to_get}")
+        print(f"The number to get is: {number_to_get}")
         print(f"Your result: {result if result is not None else 'No result found'}")
-
-
 
 
 if __name__ == "__main__":
