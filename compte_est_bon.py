@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import random
-from functools import reduce
 
 
-numbers_to_use = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100]
+numbers_list = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75, 100]
+
 
 operations = ["addition", "soustraction", "multiplication", "division"]
 
@@ -30,7 +30,18 @@ def choose_operation():
         print("Invalid choice please try again.")
 
 
+def pick_six_numbers(numbers):
+    six_numbers = random.sample(numbers, 6)
+    return six_numbers
+
+
+numbers_to_use = pick_six_numbers(numbers_list)
+
 def choose_two_numbers():
+    """
+    Retourne une liste des deux nombres choisis
+    :return: list
+    """
     chosen_numbers = []
 
     for i in range(2):
@@ -84,6 +95,10 @@ def operation_result(numbers, operation):
 
 
 def launch_game():
+    """
+    Mécanique générale du jeu
+    :return: Print, mais ne retourne rien
+    """
     print("Welcome to 'Le compte est Bon'!")
 
     number_to_get = choose_number_to_get()
