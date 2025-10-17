@@ -35,6 +35,7 @@ def pick_six_numbers(numbers):
     return six_numbers
 
 
+numbers_to_use = pick_six_numbers(numbers_list)
 
 
 def choose_two_numbers():
@@ -42,7 +43,7 @@ def choose_two_numbers():
     Retourne une liste des deux nombres choisis
     :return: list
     """
-    numbers_to_use = pick_six_numbers(numbers_list)
+
     chosen_numbers = []
 
     for i in range(2):
