@@ -24,29 +24,28 @@ def choose_operation():
     :return: Operation (str)
     """
     while True:
-        chosen_operation = input("Choose between 'Addition, 'Soustraction', 'Multiplication' and 'Division': ")
-        if chosen_operation.lower() not in operations:
-            continue
-        return chosen_operation.lower()
+        chosen_operation = input("Choose between 'Addition, 'Soustraction', 'Multiplication' and 'Division': ").lower()
+        if chosen_operation.lower() in operations:
+            return chosen_operation
+        print("Invalid choice please try again.")
 
 
 def choose_two_numbers():
     chosen_numbers = []
-    while True:
-        number1 = int(input("Choose first number from the list: "))
-        if number1 not in numbers_to_use:
+
+    for i in range(2):
+        while True:
+            number = input(f"Choose number {i + 1} from the list: ")
+            if not number.isdigit():
+                print("Please enter an integer.")
+                continue
+            if int(number) in numbers_to_use:
+                numbers_to_use.remove(int(number))
+                chosen_numbers.append(int(number))
+                break
             print("This number is not in the list!")
-            continue
-        numbers_to_use.pop(numbers_to_use.index(number1))
-        break
-    while True:
-        number2 = int(input("Choose second number from the list: "))
-        if number2 not in numbers_to_use:
-            print("This number is not in the list!")
-            continue
-        numbers_to_use.pop(numbers_to_use.index(number2))
-        chosen_numbers.extend([number1, number2])
-        return chosen_numbers
+
+    return chosen_numbers
 
 
 def operation_result(numbers, operation):
@@ -57,52 +56,64 @@ def operation_result(numbers, operation):
     :return: Résultat de l'opération (int)
     """
     numbers.sort()
+    a, b = numbers
+    result = None
+
     match operation:
         case "addition":
-            numbers_to_use.append(sum(numbers))
-            return sum(numbers)
+            result = a + b
         case "soustraction":
-            numbers_to_use.append(numbers[1] - numbers[0])
-            return numbers[1] - numbers[0]
+            result = b - a
         case "multiplication":
-            numbers_to_use.append(reduce(lambda x, y: x * y, numbers))
-            return reduce(lambda x, y: x * y, numbers)
+            result = a * b
         case "division":
-            if numbers[1] % numbers[0] == 0:
-                result = numbers[1] // numbers[0]
-            else:
-                numbers_to_use.extend([numbers[0], numbers[1]])
+            if a == 0:  # éviter division par zéro
+                print("Error: division by zero.")
+                numbers_to_use.extend(numbers)
                 return None
-            numbers_to_use.append(result)
-            return result
-    return None
+            if b % a != 0:  # si non divisible
+                print("Non integer division, operation cancelled.")
+                numbers_to_use.extend(numbers)
+                return None
+            result = b // a
+        case _:
+            print("Unknown operation.")
+            return None
+    numbers_to_use.append(result)
+    return result
 
 
 def launch_game():
-    result = None
-    number_to_get = choose_number_to_get()
-    want_to_continue = "Y"
     print("Welcome to 'Le compte est Bon'!")
+
+    number_to_get = choose_number_to_get()
     print(f"The number to get is : {number_to_get}")
     print(f"Here are your numbers: {numbers_to_use}")
-    while want_to_continue.lower() == "y":
-        result = operation_result(choose_two_numbers(), choose_operation())
+
+    result = None
+    last_valid_result = None
+
+    while input("Do you want to continue? (Y/n): ").strip().lower() in ("y", ""):
+        chosen_numbers = choose_two_numbers()
+        operation = choose_operation()
+        result = operation_result(chosen_numbers, operation)
+
         print(f"The number to get is: {number_to_get}")
         print(f"Result: {result if result is not None else 'Opération impossible'}")
         print(f"Remaining numbers: {numbers_to_use}")
+        print(numbers_to_use)
+
+        if result is not None:
+            last_valid_result = result
+
         if result == number_to_get:
             print("Le Compte est bon!")
-            break
-        elif result is None and numbers_to_use[len(numbers_to_use) - 3] == 100:
-            pass
-        else:
-            result = numbers_to_use[len(numbers_to_use) - 1]
+            return
 
-        want_to_continue = input("Do you want to continue?: Y/n ")
+    final_result = last_valid_result if result is None else result
 
-    else:
-        print(f"The number to get is: {number_to_get}")
-        print(f"Your result: {result if result is not None else 'No result found'}")
+    print(f"The number to get is: {number_to_get}")
+    print(f"Your result: {final_result if final_result is not None else 'No result found'}")
 
 
 if __name__ == "__main__":
